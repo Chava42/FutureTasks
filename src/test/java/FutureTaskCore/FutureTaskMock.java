@@ -1,12 +1,12 @@
-package Sample;
+package FutureTaskCore;
 
 /**
  * Created by mks4b_000 on 12/5/2015.
  */
-public class FutureTask implements Runnable{
+public class FutureTaskMock implements Runnable{
     int taskNo;
 
-    public FutureTask(int taskNo){
+    public FutureTaskMock(int taskNo){
         this.taskNo = taskNo;
     }
 
