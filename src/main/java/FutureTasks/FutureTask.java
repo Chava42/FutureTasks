@@ -15,11 +15,6 @@ public class FutureTask implements FutureTaskInterface, Serializable {
     }
 
     @Override
-    public void run() {
-        System.out.println("Running task number " + taskNo);
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -32,5 +27,11 @@ public class FutureTask implements FutureTaskInterface, Serializable {
     @Override
     public int hashCode() {
         return taskNo;
+    }
+
+    @Override
+    public Object call() throws Exception {
+        System.out.println("Running task number " + taskNo);
+        return null;
     }
 }
