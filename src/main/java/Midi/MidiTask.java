@@ -1,5 +1,7 @@
 package Midi;
 
+import FutureTaskCore.FutureTaskInterface;
+
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.MidiChannel;
@@ -8,7 +10,7 @@ import javax.sound.midi.MidiChannel;
 /**
  * Created by mks4b_000 on 12/8/2015.
  */
-public class MidiTask implements Runnable {
+public class MidiTask implements FutureTaskInterface {
 
     int channel = 0; //0 is piano
     int note = 0; //note pitch

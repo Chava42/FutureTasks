@@ -4,6 +4,7 @@ package FutureTaskCore;
  * Created by mks4b_000 on 5/15/2016.
  */
 
+import Utils.DurationConverter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -11,32 +12,63 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by mks4b_000 on 12/5/2015.
  */
 public class FutureTaskLauncher {
+
     private ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(10);
 
     private static Logger logger = LogManager.getLogger(FutureTaskLauncher.class);
-    public FutureTaskLauncher (){
+
+    private final ChronoUnit chronoUnit;
+
+    public FutureTaskLauncher() {
+        this.chronoUnit = ChronoUnit.SECONDS;
     }
-    public void addTask(Runnable ft, ZonedDateTime zt){
-        executorService.schedule(ft, timeUntil(zt), TimeUnit.SECONDS);
-        logger.debug("Scheduled task in main executor");
+
+    public FutureTaskLauncher(ChronoUnit chronoUnit) {
+        boolean err = false;
+        try {
+            DurationConverter.convert(chronoUnit);
+
+        } catch (IllegalArgumentException e) {
+            logger.warn("The ChronoUnit supplied was null, using default of SECONDS", e);
+            err=true;
+        } catch (UnsupportedOperationException e) {
+            logger.warn("The ChronoUnit supplied is not supported, using default of SECONDS", e);
+            err=true;
+        }
+
+        if (err) {
+            this.chronoUnit = ChronoUnit.SECONDS;
+        } else {
+            this.chronoUnit = chronoUnit;
+        }
     }
-    public void shutdown(){
+
+    public void addTask(FutureTaskPairInterface pair) {
+        logger.debug("Added scheduled task to executor");
+        executorService.schedule(pair.getTask(), timeUntil(pair.getFutureTime()),
+                DurationConverter.convert(chronoUnit));
+    }
+
+    public ChronoUnit getChronoUnit() {
+        return chronoUnit;
+    }
+
+    public void shutdown() {
         executorService.shutdown();
     }
-    protected long timeUntil(ZonedDateTime now, ZonedDateTime zt){
-        long diff = now.until(zt, ChronoUnit.SECONDS);
 
-        return (diff >0)?diff:0;
+    protected long timeUntil(ZonedDateTime now, ZonedDateTime zt) {
+        long diff = now.until(zt, chronoUnit);
+        return (diff > 0) ? diff : 0;
     }
 
-    protected long timeUntil(ZonedDateTime zt){
+    protected long timeUntil(ZonedDateTime zt) {
         ZonedDateTime now = ZonedDateTime.now();
-        return timeUntil(now,zt);
+        return timeUntil(now, zt);
     }
 }
