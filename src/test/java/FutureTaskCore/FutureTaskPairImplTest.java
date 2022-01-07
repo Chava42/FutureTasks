@@ -1,5 +1,6 @@
 package FutureTaskCore;
 
+import FutureTasks.FutureCallableResultImpl;
 import FutureTasks.FutureTask;
 import FutureTasks.FutureTaskPairImpl;
 import Utils.SerializationHelperUtils;
@@ -16,7 +17,7 @@ import java.time.ZonedDateTime;
 public class FutureTaskPairImplTest {
     @Test
     public void testTaskMinimal(){
-        FutureTask futureTask = new FutureTask(6);
+        FutureTask futureTask = new FutureTask(6, FutureCallableResultImpl.class);
         ZonedDateTime zonedDateTime = ZonedDateTime.now();
         FutureTaskPairImpl futureTaskPairImpl = new FutureTaskPairImpl(futureTask,zonedDateTime);
         Assert.assertEquals(futureTaskPairImpl.getTask(), futureTask);
@@ -40,7 +41,7 @@ public class FutureTaskPairImplTest {
     @Test
     public void testSerialization() throws IOException {
 
-        FutureTaskPairImpl futureTaskPairImpl1 = new FutureTaskPairImpl(new FutureTask(6), ZonedDateTime.now());
+        FutureTaskPairImpl futureTaskPairImpl1 = new FutureTaskPairImpl(new FutureTask(6,FutureCallableResultImpl.class), ZonedDateTime.now());
         FileOutputStream fileOut =
                 new FileOutputStream("test.ser");
         ObjectOutputStream out = new ObjectOutputStream(fileOut);

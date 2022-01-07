@@ -5,13 +5,13 @@ import java.time.ZonedDateTime;
 /**
  * Created by mks4b_000 on 5/17/2016.
  */
-public interface FutureTaskPairInterface {
+public interface FutureTaskPairInterface<T extends FutureCallableResult> {
 
     /**
      * Return the runnable associated with the Future task
      * @return
      */
-    FutureTaskInterface getTask();
+    FutureTaskCallableInterface<T> getTask();
     /**
      * Return the future time at which the Future task should be run.
      * @return

@@ -8,5 +8,7 @@ import java.util.concurrent.Callable;
  * Needs to be both Runnable and Serializable
  * as we will run it and transfer it through files/sockets.
  */
-public interface FutureTaskInterface extends Callable, Serializable {
+
+public interface FutureTaskCallableInterface<T extends FutureCallableResult> extends Callable<T>, Serializable {
+    String getUniqueIdentifier();
 }

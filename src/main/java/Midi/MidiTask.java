@@ -1,16 +1,17 @@
 package Midi;
 
-import FutureTaskCore.FutureTaskInterface;
+import FutureTaskCore.FutureTaskCallableInterface;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.MidiChannel;
+import java.util.UUID;
 
 
 /**
  * Created by mks4b_000 on 12/8/2015.
  */
-public class MidiTask implements FutureTaskInterface {
+public class MidiTask implements FutureTaskCallableInterface {
 
     int channel = 0; //0 is piano
     int note = 0; //note pitch
@@ -39,7 +40,7 @@ public class MidiTask implements FutureTaskInterface {
         this.duration = duration;
     }
 
-    @Override
+    //@Override
     public void run() {
         channels[channel].noteOn(note, volume); // C
         try {
@@ -94,6 +95,23 @@ public class MidiTask implements FutureTaskInterface {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public Object call() throws Exception {
+        channels[channel].noteOn(note, volume); // C
+        try {
+            Thread.sleep(duration);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        channels[channel].noteOff(note);
+        return null;
+    }
+
+    @Override
+    public String getUniqueIdentifier() {
+        return UUID.randomUUID().toString();
     }
 }
 
